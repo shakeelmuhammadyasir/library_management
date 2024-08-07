@@ -118,12 +118,6 @@
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
 				<version>0.8.6</version>
-				<configuration>
-					<excludes>
-						<exclude>**/model/*.*</exclude>
-						<exclude>**/LibrarySwingApp.*</exclude>
-					</excludes>
-				</configuration>
 				<executions>
 					<execution>
 						<goals>
@@ -132,6 +126,12 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<excludes>
+						<exclude>**/model/*.*</exclude>
+						<exclude>**/LibrarySwingApp.*</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 
 			<plugin>
@@ -186,7 +186,7 @@
 				<artifactId>coveralls-maven-plugin</artifactId>
 				<version>4.3.0</version>
 				<configuration>
-					<repoToken>${coveralls.repoToken}</repoToken>					
+					<repoToken>${coveralls.repoToken}</repoToken>
 				</configuration>
 				<dependencies>
 					<dependency>
