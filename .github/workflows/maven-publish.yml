@@ -46,7 +46,7 @@ jobs:
         run: xvfb-run mvn verify coveralls:report -Dcoveralls.repoToken=$COVERALLS_REPO_TOKEN
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_TOKEN }}
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
 
       - name: SonarCloud
         run: xvfb-run mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=shakeelmuhammadyasir_library_management
