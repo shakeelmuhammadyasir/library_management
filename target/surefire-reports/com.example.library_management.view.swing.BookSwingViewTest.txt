@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.library_management.view.swing.BookSwingViewTest
 -------------------------------------------------------------------------------
-Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 29.928 s - in com.example.library_management.view.swing.BookSwingViewTest
+Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 34.721 s - in com.example.library_management.view.swing.BookSwingViewTest

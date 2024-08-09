@@ -10,8 +10,8 @@ public class LibraryController implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 
-	private BookView bookView;
-    private BookRepository bookRepository;
+	private transient BookView bookView;
+    private transient BookRepository bookRepository;
 
     public LibraryController(BookView bookView, BookRepository bookRepository) {
         this.bookView = bookView;
