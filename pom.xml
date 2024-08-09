@@ -187,6 +187,12 @@
 				<version>4.3.0</version>
 				<configuration>
 					<repoToken>${coveralls.repoToken}</repoToken>
+					<jacocoReports>
+						<jacocoReport>
+							${project.build.directory}/jacoco-ut/jacoco.xml</jacocoReport>
+						<jacocoReport>
+							${project.build.directory}/jacoco-it/jacoco.xml</jacocoReport>
+					</jacocoReports>
 				</configuration>
 				<dependencies>
 					<dependency>
