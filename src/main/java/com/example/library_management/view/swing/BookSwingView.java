@@ -1,11 +1,24 @@
 package com.example.library_management.view.swing;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+
 import com.example.library_management.controller.LibraryController;
 import com.example.library_management.model.Book;
 import com.example.library_management.view.BookView;
@@ -113,56 +126,46 @@ public class BookSwingView extends JFrame implements BookView {
 		add(new JScrollPane(bookTable), BorderLayout.CENTER);
 
 		// Action Listeners
-		addButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					Integer id = Integer.parseInt(idTextField.getText());
-					Book book = new Book(id, serialNumberTextField.getText(), nameTextField.getText(),
-							authorNameTextField.getText(), genreTextField.getText(), availableCheckBox.isSelected());
-					libraryController.newBook(book);
-				} catch (NumberFormatException ex) {
-					showError("ID must be an integer");
-				}
-			}
+		addButton.addActionListener(e -> {
+		    try {
+		        Integer id = Integer.parseInt(idTextField.getText());
+		        Book book = new Book(id, serialNumberTextField.getText(), nameTextField.getText(),
+		                authorNameTextField.getText(), genreTextField.getText(), availableCheckBox.isSelected());
+		        libraryController.newBook(book);
+		    } catch (NumberFormatException ex) {
+		        showError("ID must be an integer");
+		    }
 		});
 
-		deleteButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				int selectedRow = bookTable.getSelectedRow();
-				if (selectedRow != -1) {
-					String serialNumber = (String) tableModel.getValueAt(selectedRow, 1);
-					Book book = new Book((Integer) tableModel.getValueAt(selectedRow, 0), serialNumber,
-							(String) tableModel.getValueAt(selectedRow, 2),
-							(String) tableModel.getValueAt(selectedRow, 3),
-							(String) tableModel.getValueAt(selectedRow, 4),
-							(Boolean) tableModel.getValueAt(selectedRow, 5));
-					libraryController.deleteBook(book);
-				} else {
-					showError("Please select a book to delete");
-				}
-			}
+
+		deleteButton.addActionListener(e -> {
+		    int selectedRow = bookTable.getSelectedRow();
+		    if (selectedRow != -1) {
+		        String serialNumber = (String) tableModel.getValueAt(selectedRow, 1);
+		        Book book = new Book((Integer) tableModel.getValueAt(selectedRow, 0), serialNumber,
+		                (String) tableModel.getValueAt(selectedRow, 2),
+		                (String) tableModel.getValueAt(selectedRow, 3),
+		                (String) tableModel.getValueAt(selectedRow, 4),
+		                (Boolean) tableModel.getValueAt(selectedRow, 5));
+		        libraryController.deleteBook(book);
+		    } else {
+		        showError("Please select a book to delete");
+		    }
 		});
 
-		searchButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String selectedSerialNumber = (String) serialNumberComboBox.getSelectedItem();
-				if (selectedSerialNumber != null) {
-					libraryController.searchBook(selectedSerialNumber);
-				} else {
-					showError("Please select a serial number from the drop-down");
-				}
-			}
+
+		searchButton.addActionListener(e -> {
+		    String selectedSerialNumber = (String) serialNumberComboBox.getSelectedItem();
+		    if (selectedSerialNumber != null) {
+		        libraryController.searchBook(selectedSerialNumber);
+		    } else {
+		        showError("Please select a serial number from the drop-down");
+		    }
 		});
 
-		clearButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				clearFields();
-			}
-		});
+
+		clearButton.addActionListener(e -> clearFields());
+
 	}
 
 	private JTextField createLabeledTextField(String label, JPanel panel, GridBagConstraints gbc, int row) {

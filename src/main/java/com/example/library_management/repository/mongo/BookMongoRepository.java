@@ -1,7 +1,6 @@
 package com.example.library_management.repository.mongo;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.bson.Document;
@@ -26,14 +25,14 @@ public class BookMongoRepository implements BookRepository {
     public List<Book> findAll() {
         return StreamSupport.stream(bookCollection.find().spliterator(), false)
                 .map(this::fromDocumentToBook)
-                .collect(Collectors.toList());
+                .toList();  
     }
 
     public List<Book> findByName(String name) {
         return StreamSupport.stream(bookCollection.find().spliterator(), false)
                 .map(this::fromDocumentToBook)
                 .filter(b -> b.getName().contains(name))
-                .collect(Collectors.toList());
+                .toList();  
     }
 
     public Book findBySerialNumber(String serialNumber) {

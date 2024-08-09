@@ -30,129 +30,121 @@ import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 
-public class BookMongoRepositoryTest {
+class BookMongoRepositoryTest {
 
-    @Mock
-    private MongoClient mockClient;
+	@Mock
+	private MongoClient mockClient;
 
-    @Mock
-    private MongoDatabase mockDatabase;
+	@Mock
+	private MongoDatabase mockDatabase;
 
-    @Mock
-    private MongoCollection<Document> mockCollection;
+	@Mock
+	private MongoCollection<Document> mockCollection;
 
-    @Mock
-    private FindIterable<Document> mockFindIterable;
+	@Mock
+	private FindIterable<Document> mockFindIterable;
 
-    @Mock
-    private MongoCursor<Document> mockCursor;
+	@Mock
+	private MongoCursor<Document> mockCursor;
 
-    private BookMongoRepository repository;
+	private BookMongoRepository repository;
 
-    @BeforeEach
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-        when(mockClient.getDatabase(anyString())).thenReturn(mockDatabase);
-        when(mockDatabase.getCollection(anyString())).thenReturn(mockCollection);
-        repository = new BookMongoRepository(mockClient, "testDatabase", "testCollection");
-    }
+	@BeforeEach
+	void setup() {
+		MockitoAnnotations.openMocks(this);
+		when(mockClient.getDatabase(anyString())).thenReturn(mockDatabase);
+		when(mockDatabase.getCollection(anyString())).thenReturn(mockCollection);
+		repository = new BookMongoRepository(mockClient, "testDatabase", "testCollection");
+	}
 
-    @Test
-    public void testFindAllBooks() {
-        // Given
-        when(mockCollection.find()).thenReturn(mockFindIterable);
-        when(mockFindIterable.spliterator()).thenReturn(Collections.<Document>emptyList().spliterator());
+	@Test
+	void testFindAllBooks() {
+		// Given
+		when(mockCollection.find()).thenReturn(mockFindIterable);
+		when(mockFindIterable.spliterator()).thenReturn(Collections.<Document>emptyList().spliterator());
 
-        // When
-        List<Book> books = repository.findAll();
+		// When
+		List<Book> books = repository.findAll();
 
-        // Then
-        assertNotNull(books, "The list of books should not be null");
-        assertTrue(books.isEmpty(), "The list of books should be empty");
-    }
+		// Then
+		assertNotNull(books, "The list of books should not be null");
+		assertTrue(books.isEmpty(), "The list of books should be empty");
+	}
 
-    @Test
-    public void testFindByName() {
-        // Given
-        Document doc = new Document("id", 1)
-                .append("serialNumber", "SN001")
-                .append("name", "Java Programming")
-                .append("authorName", "Author A")
-                .append("genre", "Programming")
-                .append("isAvailable", true);
+	@Test
+	void testFindByName() {
+		// Given
+		Document doc = new Document("id", 1).append("serialNumber", "SN001").append("name", "Java Programming")
+				.append("authorName", "Author A").append("genre", "Programming").append("isAvailable", true);
 
-        when(mockCollection.find()).thenReturn(mockFindIterable);
-        when(mockFindIterable.spliterator()).thenReturn(Arrays.asList(doc).spliterator());
+		when(mockCollection.find()).thenReturn(mockFindIterable);
+		when(mockFindIterable.spliterator()).thenReturn(Arrays.asList(doc).spliterator());
 
-        // When
-        List<Book> books = repository.findByName("Java");
+		// When
+		List<Book> books = repository.findByName("Java");
 
-        // Then
-        assertNotNull(books, "The list of books should not be null");
-        assertFalse(books.isEmpty(), "The list of books should not be empty");
-        assertEquals(1, books.size(), "There should be one book in the list");
-        assertEquals("Java Programming", books.get(0).getName(), "The book name should be 'Java Programming'");
-    }
+		// Then
+		assertNotNull(books, "The list of books should not be null");
+		assertFalse(books.isEmpty(), "The list of books should not be empty");
+		assertEquals(1, books.size(), "There should be one book in the list");
+		assertEquals("Java Programming", books.get(0).getName(), "The book name should be 'Java Programming'");
+	}
 
-    @Test
-    public void testFindBySerialNumber_Found() {
-        // Given
-        Document doc = new Document("id", 1)
-                .append("serialNumber", "SN001")
-                .append("name", "Java Programming")
-                .append("authorName", "Author A")
-                .append("genre", "Programming")
-                .append("isAvailable", true);
+	@Test
+	void testFindBySerialNumber_Found() {
+		// Given
+		Document doc = new Document("id", 1).append("serialNumber", "SN001").append("name", "Java Programming")
+				.append("authorName", "Author A").append("genre", "Programming").append("isAvailable", true);
 
-        when(mockCollection.find(Filters.eq("serialNumber", "SN001"))).thenReturn(mockFindIterable);
-        when(mockFindIterable.spliterator()).thenReturn(Arrays.asList(doc).spliterator());
+		when(mockCollection.find(Filters.eq("serialNumber", "SN001"))).thenReturn(mockFindIterable);
+		when(mockFindIterable.spliterator()).thenReturn(Arrays.asList(doc).spliterator());
 
-        // When
-        Book book = repository.findBySerialNumber("SN001");
+		// When
+		Book book = repository.findBySerialNumber("SN001");
 
-        // Then
-        assertNotNull(book, "The book should not be null");
-        assertEquals("SN001", book.getSerialNumber(), "The serial number should be 'SN001'");
-        assertEquals("Java Programming", book.getName(), "The book name should be 'Java Programming'");
-        assertEquals("Author A", book.getAuthorName(), "The author name should be 'Author A'");
-        assertEquals("Programming", book.getGenre(), "The genre should be 'Programming'");
-        assertTrue(book.isAvailable(), "The book should be available");
-    }
+		// Then
+		assertNotNull(book, "The book should not be null");
+		assertEquals("SN001", book.getSerialNumber(), "The serial number should be 'SN001'");
+		assertEquals("Java Programming", book.getName(), "The book name should be 'Java Programming'");
+		assertEquals("Author A", book.getAuthorName(), "The author name should be 'Author A'");
+		assertEquals("Programming", book.getGenre(), "The genre should be 'Programming'");
+		assertTrue(book.isAvailable(), "The book should be available");
+	}
 
-    @Test
-    public void testFindBySerialNumber_NotFound() {
-        // Given
-        when(mockCollection.find(Filters.eq("serialNumber", "SN002"))).thenReturn(mockFindIterable);
-        when(mockFindIterable.spliterator()).thenReturn(Collections.<Document>emptyList().spliterator());
+	@Test
+	void testFindBySerialNumber_NotFound() {
+		// Given
+		when(mockCollection.find(Filters.eq("serialNumber", "SN002"))).thenReturn(mockFindIterable);
+		when(mockFindIterable.spliterator()).thenReturn(Collections.<Document>emptyList().spliterator());
 
-        // When
-        Book book = repository.findBySerialNumber("SN002");
+		// When
+		Book book = repository.findBySerialNumber("SN002");
 
-        // Then
-        assertNull(book, "The book should be null");
-    }
+		// Then
+		assertNull(book, "The book should be null");
+	}
 
-    @Test
-    public void testSaveBook() {
-        // Given
-        Book book = new Book(1, "SN001", "Java Programming", "Author A", "Programming", true);
+	@Test
+	void testSaveBook() {
+		// Given
+		Book book = new Book(1, "SN001", "Java Programming", "Author A", "Programming", true);
 
-        // When
-        repository.save(book);
+		// When
+		repository.save(book);
 
-        // Then
-        verify(mockCollection, times(1)).insertOne(any(Document.class));
-    }
+		// Then
+		verify(mockCollection, times(1)).insertOne(any(Document.class));
+	}
 
-    @Test
-    public void testDeleteBook() {
-        // Given
-        String serialNumber = "SN001";
+	@Test
+	void testDeleteBook() {
+		// Given
+		String serialNumber = "SN001";
 
-        // When
-        repository.delete(serialNumber);
+		// When
+		repository.delete(serialNumber);
 
-        // Then
-        verify(mockCollection, times(1)).deleteOne(eq(Filters.eq("serialNumber", serialNumber)));
-    }
+		// Then
+		verify(mockCollection, times(1)).deleteOne(eq(Filters.eq("serialNumber", serialNumber)));
+	}
 }

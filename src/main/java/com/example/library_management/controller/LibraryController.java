@@ -1,10 +1,14 @@
 package com.example.library_management.controller;
 
+import java.io.Serializable;
+
 import com.example.library_management.model.Book;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.view.BookView;
 
-public class LibraryController {
+public class LibraryController implements Serializable{
+	
+	private static final long serialVersionUID = 1L;
 
 	private BookView bookView;
     private BookRepository bookRepository;
