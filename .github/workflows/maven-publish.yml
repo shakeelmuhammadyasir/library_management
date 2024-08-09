@@ -48,7 +48,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Coveralls Report
-        run: xvfb-run mvn verify coveralls:report -Dcoveralls.repoToken=$COVERALLS_REPO_TOKEN
+        run: xvfb-run mvn verify -Dcoveralls.repoToken=$COVERALLS_REPO_TOKEN coveralls:report
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
