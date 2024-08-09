@@ -93,8 +93,8 @@ public class BookSwingView extends JFrame implements BookView {
 		gbc.gridwidth = 2;
 		gbc.weightx = 0;
 		gbc.fill = GridBagConstraints.NONE;
-		availableCheckBox = new JCheckBox("Available");
-		availableCheckBox.setName("Available");
+		availableCheckBox = new JCheckBox(LABEL_AVAILABLE);
+		availableCheckBox.setName(LABEL_AVAILABLE);
 		inputPanel.add(availableCheckBox, gbc);
 
 		// Error Label

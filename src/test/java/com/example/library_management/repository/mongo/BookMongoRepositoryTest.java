@@ -138,13 +138,14 @@ class BookMongoRepositoryTest {
 
 	@Test
 	void testDeleteBook() {
-		// Given
-		String serialNumber = "SN001";
-
-		// When
-		repository.delete(serialNumber);
-
-		// Then
-		verify(mockCollection, times(1)).deleteOne(eq(Filters.eq("serialNumber", serialNumber)));
+	    // Given
+	    String serialNumber = "SN001";
+	    
+	    // When
+	    repository.delete(serialNumber);
+	    
+	    // Then
+	    verify(mockCollection, times(1)).deleteOne(Filters.eq("serialNumber", serialNumber));
 	}
+
 }
