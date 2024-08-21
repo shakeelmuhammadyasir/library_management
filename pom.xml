@@ -21,6 +21,7 @@
 		<picocli.version>4.7.0</picocli.version>
 		<sonar.organization>shakeelmuhammadyasir</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<sonar.scanner.force-deprecated-java-version>true</sonar.scanner.force-deprecated-java-version>
 		<!--<sonar.issue.ignore.multicriteria>e11,e12,e13</sonar.issue.ignore.multicriteria>
 		<sonar.issue.ignore.multicriteria.e11.ruleKey>
 			java:S110
