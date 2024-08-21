@@ -6,11 +6,11 @@ import com.example.library_management.model.Book;
 import com.example.library_management.repository.BookRepository;
 import com.example.library_management.view.BookView;
 
-public class LibraryController implements Serializable{
-	
-	private static final long serialVersionUID = 1L;
+public class LibraryController implements Serializable {
 
-	private transient BookView bookView;
+    private static final long serialVersionUID = 1L;
+
+    private transient BookView bookView;
     private transient BookRepository bookRepository;
 
     public LibraryController(BookView bookView, BookRepository bookRepository) {
@@ -43,6 +43,7 @@ public class LibraryController implements Serializable{
         bookRepository.delete(book.getSerialNumber());
         bookView.bookRemoved(book);
     }
+
     public void searchBook(String serialNumber) {
         Book book = bookRepository.findBySerialNumber(serialNumber);
         if (book == null) {
@@ -52,5 +53,4 @@ public class LibraryController implements Serializable{
 
         bookView.showSearchedBooks(book);
     }
-
 }

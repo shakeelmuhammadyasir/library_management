@@ -121,7 +121,7 @@ public class BookSwingView extends JFrame implements BookView {
 		serialNumberComboBox.setName("Serial Number ComboBox");
 		buttonsPanel.add(serialNumberComboBox);
 
-		searchButton = new JButton("Search");
+		searchButton = new JButton("Search By Serial number");
 		searchButton.setName("Search");
 		buttonsPanel.add(searchButton);
 

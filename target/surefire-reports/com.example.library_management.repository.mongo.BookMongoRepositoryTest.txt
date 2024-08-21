@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: com.example.library_management.repository.mongo.BookMongoRepositoryTest
 -------------------------------------------------------------------------------
-Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 2.609 s - in com.example.library_management.repository.mongo.BookMongoRepositoryTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.495 s - in com.example.library_management.repository.mongo.BookMongoRepositoryTest
