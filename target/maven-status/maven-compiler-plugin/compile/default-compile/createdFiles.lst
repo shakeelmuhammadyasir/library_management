@@ -1,7 +1,0 @@
-com/example/library_management/app/swing/LibrarySwingApp.class
-com/example/library_management/repository/BookRepository.class
-com/example/library_management/view/BookView.class
-com/example/library_management/model/Book.class
-com/example/library_management/controller/LibraryController.class
-com/example/library_management/view/swing/BookSwingView.class
-com/example/library_management/repository/mongo/BookMongoRepository.class

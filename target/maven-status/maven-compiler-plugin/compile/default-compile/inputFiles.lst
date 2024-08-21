@@ -1,7 +1,0 @@
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/repository/BookRepository.java
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/view/swing/BookSwingView.java
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/app/swing/LibrarySwingApp.java
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/controller/LibraryController.java
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/repository/mongo/BookMongoRepository.java
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/view/BookView.java
-/home/ubuntu/eclipse-workspace/LibraryManagement/src/main/java/com/example/library_management/model/Book.java
