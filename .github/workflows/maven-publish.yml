@@ -18,7 +18,7 @@ jobs:
         java: [8, 17]
         include:
           - java: 8
-            maven-args: "-Dcoveralls.repoToken=$COVERALLS_REPO_TOKEN coveralls:report"
+            maven-args: "-DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report"
           - java: 17
             maven-args: "-B org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=shakeelmuhammadyasir_library_management"
 
