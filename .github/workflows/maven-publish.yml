@@ -13,9 +13,16 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
+    strategy:
+      matrix:
+        java: [8, 17]
+        include:
+          - java: 8
+            maven-args: "-Dcoveralls.repoToken=${{ secrets.COVERALLS_REPO_TOKEN }} coveralls:report"
+          - java: 17
+            maven-args: "-B org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=shakeelmuhammadyasir_library_management"
+
+    name: Build with Java ${{ matrix.java }}
 
     steps:
       - name: Checkout code
@@ -23,40 +30,24 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 8
+      - name: Set up JDK ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
           distribution: 'zulu'
-          java-version: 8
+          java-version: ${{ matrix.java }}
 
-      - name: Cache Maven packages
+      - name: Cache Maven and SonarCloud packages
         uses: actions/cache@v3
         with:
           path: |
             ~/.m2
             ~/.sonar/cache
-          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml', '**/*.yml') }}
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2-
 
-      - name: Tests
-        run: xvfb-run mvn verify -Pjacoco
-
-      - name: Coveralls Report
-        run: xvfb-run mvn test -DrepoToken=$COVERALLS_REPO_TOKEN coveralls:report
+      - name: Build with Maven
+        run: mvn clean verify -Pjacoco ${{ matrix.maven-args }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
-
-      
-      - name: Set up JDK 17 for SonarCloud
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'zulu'
-          java-version: 17
-
-      - name: SonarCloud
-        run: xvfb-run mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar -Dsonar.projectKey=shakeelmuhammadyasir_library_management
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
