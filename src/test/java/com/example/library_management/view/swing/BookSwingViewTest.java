@@ -9,37 +9,57 @@ import javax.swing.JLabel;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.swing.data.TableCell;
+import org.assertj.swing.edt.GuiActionRunner;
 import org.assertj.swing.fixture.FrameFixture;
 import org.assertj.swing.fixture.JButtonFixture;
 import org.assertj.swing.fixture.JCheckBoxFixture;
 import org.assertj.swing.fixture.JComboBoxFixture;
 import org.assertj.swing.fixture.JTableFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
+import org.assertj.swing.junit.runner.GUITestRunner;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import com.example.library_management.controller.LibraryController;
 import com.example.library_management.model.Book;
 
+
+@RunWith(GUITestRunner.class)
 public class BookSwingViewTest {
 	private FrameFixture window;
 	private BookSwingView bookSwingView;
+	
+	@Mock
 	private LibraryController libraryControllerMock;
+	private AutoCloseable closeable;
 
 	@Before
 	public void setUp() {
-		libraryControllerMock = Mockito.mock(LibraryController.class);
-		bookSwingView = new BookSwingView();
-		bookSwingView.setLibraryController(libraryControllerMock);
-		window = new FrameFixture(bookSwingView);
+
+		closeable = MockitoAnnotations.openMocks(this);	
+		GuiActionRunner.execute(() -> {
+			bookSwingView = new BookSwingView();
+			bookSwingView.setLibraryController(libraryControllerMock);
+			return bookSwingView;
+		});
+
+		window = new FrameFixture( bookSwingView);
 		window.show();
 	}
 
 	@After
 	public void tearDown() {
 		window.cleanUp();
+        try {
+            closeable.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 	}
 
 	@Test
