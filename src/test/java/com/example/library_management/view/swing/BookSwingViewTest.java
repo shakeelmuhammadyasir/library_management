@@ -23,6 +23,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.assertj.swing.annotation.GUITest;
 
 import com.example.library_management.controller.LibraryController;
 import com.example.library_management.model.Book;
@@ -54,6 +55,38 @@ public class BookSwingViewTest extends AssertJSwingJUnitTestCase {
 		window.cleanUp();
 		closeable.close();
 	}
+	
+	
+	@Test @GUITest
+	public void testInitialStates() {
+	    // Given
+	    JTextComponentFixture idTextField = window.textBox("ID");
+	    JTextComponentFixture serialNumberTextField = window.textBox("Serial Number");
+	    JTextComponentFixture nameTextField = window.textBox("Name");
+	    JTextComponentFixture authorNameTextField = window.textBox("Author Name");
+	    JTextComponentFixture genreTextField = window.textBox("Genre");
+	    JButtonFixture addButton = window.button("Add Book");
+	    JButtonFixture deleteButton = window.button("Delete Selected Book");
+	    JComboBoxFixture serialNumberComboBox = window.comboBox("Serial Number ComboBox");
+	    JLabel errorLabel = bookSwingView.getErrorLabel();
+	    JTableFixture table = window.table();
+
+	    // Then
+	    idTextField.requireEnabled();
+	    serialNumberTextField.requireEnabled();
+	    nameTextField.requireEnabled();
+	    authorNameTextField.requireEnabled();
+	    genreTextField.requireEnabled();
+
+	    addButton.requireEnabled();
+	    deleteButton.requireEnabled();
+
+	    assertThat(serialNumberComboBox.contents()).isEmpty();
+	    assertThat(errorLabel.getText()).isEqualTo(" ");
+	    assertThat(table.rowCount()).isZero();
+	}
+
+
 
 	@Test
 	public void testAddBookButtonWithValidData() {
