@@ -17,8 +17,7 @@ import org.assertj.swing.fixture.JComboBoxFixture;
 import org.assertj.swing.fixture.JTableFixture;
 import org.assertj.swing.fixture.JTextComponentFixture;
 import org.assertj.swing.junit.runner.GUITestRunner;
-import org.junit.After;
-import org.junit.Before;
+import org.assertj.swing.junit.testcase.AssertJSwingJUnitTestCase;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -28,38 +27,32 @@ import org.mockito.MockitoAnnotations;
 import com.example.library_management.controller.LibraryController;
 import com.example.library_management.model.Book;
 
-
 @RunWith(GUITestRunner.class)
-public class BookSwingViewTest {
+public class BookSwingViewTest extends AssertJSwingJUnitTestCase {
 	private FrameFixture window;
 	private BookSwingView bookSwingView;
-	
+
 	@Mock
 	private LibraryController libraryControllerMock;
 	private AutoCloseable closeable;
 
-	@Before
-	public void setUp() {
-
-		closeable = MockitoAnnotations.openMocks(this);	
+	@Override
+	protected void onSetUp() throws Exception {
+		closeable = MockitoAnnotations.openMocks(this);
 		GuiActionRunner.execute(() -> {
 			bookSwingView = new BookSwingView();
 			bookSwingView.setLibraryController(libraryControllerMock);
 			return bookSwingView;
 		});
 
-		window = new FrameFixture( bookSwingView);
+		window = new FrameFixture(robot(), bookSwingView);
 		window.show();
 	}
 
-	@After
-	public void tearDown() {
+	@Override
+	protected void onTearDown() throws Exception {
 		window.cleanUp();
-        try {
-            closeable.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+		closeable.close();
 	}
 
 	@Test
@@ -115,26 +108,24 @@ public class BookSwingViewTest {
 		Mockito.verify(libraryControllerMock, Mockito.never()).newBook(Mockito.any(Book.class));
 	}
 
-    @Test
-    public void testDeleteBookButtonWithBookSelected() {
-        // Given
-        Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
-        bookSwingView.bookAdded(book);
-        JTableFixture table = window.table();
-        table.selectRows(0); 
+	@Test
+	public void testDeleteBookButtonWithBookSelected() {
+		// Given
+		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
+		GuiActionRunner.execute(() -> bookSwingView.bookAdded(book));
+		robot().waitForIdle();
+		JTableFixture table = window.table();
+		table.selectRows(0);
 
-        // When
-        window.button("Delete Selected Book").click();
+		// When
+		window.button("Delete Selected Book").click();
 
-        // Then
-        Mockito.verify(libraryControllerMock).deleteBook(Mockito.argThat(bookArg -> 
-            bookArg.getId() == book.getId() &&
-            bookArg.getSerialNumber().equals(book.getSerialNumber()) &&
-            bookArg.getName().equals(book.getName()) &&
-            bookArg.getAuthorName().equals(book.getAuthorName()) &&
-            bookArg.getGenre().equals(book.getGenre()) &&
-            bookArg.isAvailable() == book.isAvailable()));
-    }
+		// Then
+		Mockito.verify(libraryControllerMock).deleteBook(Mockito.argThat(bookArg -> bookArg.getId() == book.getId()
+				&& bookArg.getSerialNumber().equals(book.getSerialNumber()) && bookArg.getName().equals(book.getName())
+				&& bookArg.getAuthorName().equals(book.getAuthorName()) && bookArg.getGenre().equals(book.getGenre())
+				&& bookArg.isAvailable() == book.isAvailable()));
+	}
 
 	@Test
 	public void testDeleteBookButtonWithNoBookSelected() {
@@ -155,7 +146,8 @@ public class BookSwingViewTest {
 	public void testSearchBookButton() {
 		// Given
 		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
-		bookSwingView.bookAdded(book);
+		GuiActionRunner.execute(() -> bookSwingView.bookAdded(book));
+		robot().waitForIdle();
 		JComboBoxFixture serialNumberComboBox = window.comboBox("Serial Number ComboBox");
 
 		// When
@@ -221,7 +213,8 @@ public class BookSwingViewTest {
 				new Book(2, "SN456", "Book 2", "Author 2", "Genre 2", false));
 
 		// When
-		bookSwingView.showAllBooks(books);
+		GuiActionRunner.execute(() -> bookSwingView.showAllBooks(books));
+		robot().waitForIdle();
 
 		// Then
 		JTableFixture table = window.table();
@@ -246,7 +239,8 @@ public class BookSwingViewTest {
 		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
 
 		// When
-		bookSwingView.showError(errorMessage, book);
+		GuiActionRunner.execute(() -> bookSwingView.showError(errorMessage, book));
+		robot().waitForIdle();
 
 		// Then
 		JLabel errorLabel = bookSwingView.getErrorLabel();
@@ -259,7 +253,9 @@ public class BookSwingViewTest {
 		String errorMessage = "Book not found error";
 
 		// When
-		bookSwingView.showErrorBookNotFound(errorMessage);
+		GuiActionRunner.execute(() -> bookSwingView.showErrorBookNotFound(errorMessage));
+
+		robot().waitForIdle();
 
 		// Then
 		JLabel errorLabel = bookSwingView.getErrorLabel();
@@ -273,8 +269,8 @@ public class BookSwingViewTest {
 		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
 
 		// When
-		bookSwingView.showErrorBookNotFound(errorMessage, book);
-
+		GuiActionRunner.execute(() -> bookSwingView.showErrorBookNotFound(errorMessage, book));
+		robot().waitForIdle();
 		// Then
 		JLabel errorLabel = bookSwingView.getErrorLabel();
 		assertThat(errorLabel.getText()).isEqualTo(errorMessage);
@@ -288,7 +284,15 @@ public class BookSwingViewTest {
 		method.setAccessible(true);
 
 		// When
-		method.invoke(bookSwingView, errorMessage);
+		GuiActionRunner.execute(() -> {
+			try {
+				method.invoke(bookSwingView, errorMessage);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+
+		robot().waitForIdle();
 
 		// Then
 		JLabel errorLabel = bookSwingView.getErrorLabel();
@@ -299,14 +303,15 @@ public class BookSwingViewTest {
 	public void testBookRemoved() {
 		// Given
 		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
-		bookSwingView.bookAdded(book);
+		GuiActionRunner.execute(() -> bookSwingView.bookAdded(book));
 		JTableFixture table = window.table();
 		assertThat(table.rowCount()).isEqualTo(1);
 		JComboBoxFixture comboBox = window.comboBox("Serial Number ComboBox");
 		assertThat(comboBox.contents()).contains("SN123");
 
 		// When
-		bookSwingView.bookRemoved(book);
+		GuiActionRunner.execute(() -> bookSwingView.bookRemoved(book));
+		robot().waitForIdle();
 
 		// Then
 		assertThat(table.rowCount()).isZero();
@@ -317,7 +322,8 @@ public class BookSwingViewTest {
 	public void testBookRemovedWhenNotPresent() {
 		// Given
 		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
-		bookSwingView.bookAdded(book);
+		GuiActionRunner.execute(() -> bookSwingView.bookAdded(book));
+		robot().waitForIdle();
 		JTableFixture table = window.table();
 		assertThat(table.rowCount()).isEqualTo(1);
 		JComboBoxFixture comboBox = window.comboBox("Serial Number ComboBox");
@@ -325,7 +331,7 @@ public class BookSwingViewTest {
 
 		// When
 		Book nonExistentBook = new Book(2, "SN999", "Non-existent Book", "Unknown", "Unknown", false);
-		bookSwingView.bookRemoved(nonExistentBook);
+		GuiActionRunner.execute(() -> bookSwingView.bookRemoved(nonExistentBook));
 
 		// Then
 		assertThat(table.rowCount()).isEqualTo(1);
@@ -338,7 +344,8 @@ public class BookSwingViewTest {
 		Book book = new Book(1, "SN123", "Book Name", "Author", "Genre", true);
 
 		// When
-		bookSwingView.showSearchedBooks(book);
+		GuiActionRunner.execute(() -> bookSwingView.showSearchedBooks(book));
+		robot().waitForIdle();
 
 		// Then
 		JTableFixture table = window.table();
