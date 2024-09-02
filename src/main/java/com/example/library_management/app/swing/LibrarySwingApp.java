@@ -21,10 +21,10 @@ public class LibrarySwingApp implements Callable<Void> {
     @Option(names = { "--mongo-host" }, description = "MongoDB host address", defaultValue = "localhost")
     private String mongoHost;
 
-    @Option(names = { "--mongo-port" }, description = "MongoDB host port", defaultValue = "27017")
+    @Option(names = { "--mongo-port" }, description = "MongoDB host port", defaultValue = "28017")
     private int mongoPort;
 
-    @Option(names = { "--db-name" }, description = "Database name", defaultValue = "test")
+    @Option(names = { "--db-name" }, description = "Database name", defaultValue = "library")
     private String databaseName;
 
     @Option(names = { "--db-collection" }, description = "Collection name", defaultValue = "book")
