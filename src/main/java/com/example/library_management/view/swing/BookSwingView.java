@@ -25,16 +25,16 @@ import com.example.library_management.view.BookView;
 
 public class BookSwingView extends JFrame implements BookView {
 	private static final long serialVersionUID = 1L;
-	
+
 	private static final String LABEL_ID = "ID";
-    private static final String LABEL_SERIAL_NUMBER = "Serial Number";
-    private static final String LABEL_NAME = "Name";
-    private static final String LABEL_AUTHOR_NAME = "Author Name";
-    private static final String LABEL_GENRE = "Genre";
-    private static final String LABEL_AVAILABLE = "Available";
-    private static final String ERROR_ID_INTEGER = "ID must be an integer";
-    private static final String ERROR_SELECT_BOOK = "Please select a book to delete";
-    private static final String ERROR_SELECT_SERIAL_NUMBER = "Please select a serial number from the drop-down";
+	private static final String LABEL_SERIAL_NUMBER = "Serial Number";
+	private static final String LABEL_NAME = "Name";
+	private static final String LABEL_AUTHOR_NAME = "Author Name";
+	private static final String LABEL_GENRE = "Genre";
+	private static final String LABEL_AVAILABLE = "Available";
+	private static final String ERROR_ID_INTEGER = "ID must be an integer";
+	private static final String ERROR_SELECT_BOOK = "Please select a book to delete";
+	private static final String ERROR_SELECT_SERIAL_NUMBER = "Please select a serial number from the drop-down";
 	private JTextField idTextField;
 	private JTextField serialNumberTextField;
 	private JTextField nameTextField;
@@ -72,21 +72,21 @@ public class BookSwingView extends JFrame implements BookView {
 		gbc.weightx = 1.0;
 		add(inputPanel, BorderLayout.NORTH);
 
-		// Input Fields		
+		// Input Fields
 		idTextField = createLabeledTextField(LABEL_ID, inputPanel, gbc, 0);
 		idTextField.setName(LABEL_ID);
-		
-        serialNumberTextField = createLabeledTextField(LABEL_SERIAL_NUMBER, inputPanel, gbc, 1);
-        serialNumberTextField.setName(LABEL_SERIAL_NUMBER);
-        
-        nameTextField = createLabeledTextField(LABEL_NAME, inputPanel, gbc, 2);
-        nameTextField.setName(LABEL_NAME);
-        
-        authorNameTextField = createLabeledTextField(LABEL_AUTHOR_NAME, inputPanel, gbc, 3);
-        authorNameTextField.setName(LABEL_AUTHOR_NAME);
-        
-        genreTextField = createLabeledTextField(LABEL_GENRE, inputPanel, gbc, 4);
-        genreTextField.setName(LABEL_GENRE);
+
+		serialNumberTextField = createLabeledTextField(LABEL_SERIAL_NUMBER, inputPanel, gbc, 1);
+		serialNumberTextField.setName(LABEL_SERIAL_NUMBER);
+
+		nameTextField = createLabeledTextField(LABEL_NAME, inputPanel, gbc, 2);
+		nameTextField.setName(LABEL_NAME);
+
+		authorNameTextField = createLabeledTextField(LABEL_AUTHOR_NAME, inputPanel, gbc, 3);
+		authorNameTextField.setName(LABEL_AUTHOR_NAME);
+
+		genreTextField = createLabeledTextField(LABEL_GENRE, inputPanel, gbc, 4);
+		genreTextField.setName(LABEL_GENRE);
 
 		gbc.gridx = 0;
 		gbc.gridy = 5;
@@ -130,49 +130,45 @@ public class BookSwingView extends JFrame implements BookView {
 		buttonsPanel.add(clearButton);
 
 		// Table
-		tableModel = new DefaultTableModel(
-				new Object[] { LABEL_ID, LABEL_SERIAL_NUMBER, LABEL_NAME, LABEL_AUTHOR_NAME, LABEL_GENRE, LABEL_AVAILABLE }, 0);
+		tableModel = new DefaultTableModel(new Object[] { LABEL_ID, LABEL_SERIAL_NUMBER, LABEL_NAME, LABEL_AUTHOR_NAME,
+				LABEL_GENRE, LABEL_AVAILABLE }, 0);
 		bookTable = new JTable(tableModel);
 		add(new JScrollPane(bookTable), BorderLayout.CENTER);
 
 		// Action Listeners
 		addButton.addActionListener(e -> {
-		    try {
-		        Integer id = Integer.parseInt(idTextField.getText());
-		        Book book = new Book(id, serialNumberTextField.getText(), nameTextField.getText(),
-		                authorNameTextField.getText(), genreTextField.getText(), availableCheckBox.isSelected());
-		        libraryController.newBook(book);
-		    } catch (NumberFormatException ex) {
-		        showError(ERROR_ID_INTEGER);
-		    }
+			try {
+				Integer id = Integer.parseInt(idTextField.getText());
+				Book book = new Book(id, serialNumberTextField.getText(), nameTextField.getText(),
+						authorNameTextField.getText(), genreTextField.getText(), availableCheckBox.isSelected());
+				libraryController.newBook(book);
+			} catch (NumberFormatException ex) {
+				showError(ERROR_ID_INTEGER);
+			}
 		});
-
 
 		deleteButton.addActionListener(e -> {
-		    int selectedRow = bookTable.getSelectedRow();
-		    if (selectedRow != -1) {
-		        String serialNumber = (String) tableModel.getValueAt(selectedRow, 1);
-		        Book book = new Book((Integer) tableModel.getValueAt(selectedRow, 0), serialNumber,
-		                (String) tableModel.getValueAt(selectedRow, 2),
-		                (String) tableModel.getValueAt(selectedRow, 3),
-		                (String) tableModel.getValueAt(selectedRow, 4),
-		                (Boolean) tableModel.getValueAt(selectedRow, 5));
-		        libraryController.deleteBook(book);
-		    } else {
-		        showError(ERROR_SELECT_BOOK);
-		    }
+			int selectedRow = bookTable.getSelectedRow();
+			if (selectedRow != -1) {
+				String serialNumber = (String) tableModel.getValueAt(selectedRow, 1);
+				Book book = new Book((Integer) tableModel.getValueAt(selectedRow, 0), serialNumber,
+						(String) tableModel.getValueAt(selectedRow, 2), (String) tableModel.getValueAt(selectedRow, 3),
+						(String) tableModel.getValueAt(selectedRow, 4),
+						(Boolean) tableModel.getValueAt(selectedRow, 5));
+				libraryController.deleteBook(book);
+			} else {
+				showError(ERROR_SELECT_BOOK);
+			}
 		});
-
 
 		searchButton.addActionListener(e -> {
-		    String selectedSerialNumber = (String) serialNumberComboBox.getSelectedItem();
-		    if (selectedSerialNumber != null) {
-		        libraryController.searchBook(selectedSerialNumber);
-		    } else {
-		        showError(ERROR_SELECT_SERIAL_NUMBER);
-		    }
+			String selectedSerialNumber = (String) serialNumberComboBox.getSelectedItem();
+			if (selectedSerialNumber != null) {
+				libraryController.searchBook(selectedSerialNumber);
+			} else {
+				showError(ERROR_SELECT_SERIAL_NUMBER);
+			}
 		});
-
 
 		clearButton.addActionListener(e -> clearFields());
 
@@ -240,23 +236,23 @@ public class BookSwingView extends JFrame implements BookView {
 	}
 
 	@Override
-    public void showError(String message, Book book) {
-        showError(message);
-    }
+	public void showError(String message, Book book) {
+		showError(message);
+	}
 
-    @Override
-    public void showErrorBookNotFound(String message) {
-        showError(message);
-    }
+	@Override
+	public void showErrorBookNotFound(String message) {
+		showError(message);
+	}
 
-    @Override
-    public void showErrorBookNotFound(String message, Book book) {
-        showError(message);
-    }
+	@Override
+	public void showErrorBookNotFound(String message, Book book) {
+		showError(message);
+	}
 
-    public void showError(String message) {
-        errorLabel.setText(message);
-    }
+	public void showError(String message) {
+		errorLabel.setText(message);
+	}
 
 	private void clearFields() {
 		idTextField.setText("");
@@ -266,8 +262,8 @@ public class BookSwingView extends JFrame implements BookView {
 		genreTextField.setText("");
 		availableCheckBox.setSelected(false);
 	}
-	
+
 	public JLabel getErrorLabel() {
-        return errorLabel;
-    }
+		return errorLabel;
+	}
 }

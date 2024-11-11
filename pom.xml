@@ -21,6 +21,7 @@
 		<mongo.driver.version>3.12.10</mongo.driver.version>
 		<mongo.java.server.version>1.39.0</mongo.java.server.version>
 		<picocli.version>4.7.0</picocli.version>
+		<cucumber.version>5.5.0</cucumber.version>
 		<sonar.organization>shakeelmuhammadyasir</sonar.organization>
 		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 		<sonar.scanner.force-deprecated-java-version>true</sonar.scanner.force-deprecated-java-version>
@@ -89,6 +90,13 @@
 		</dependency>
 		<dependency>
 			<groupId>org.assertj</groupId>
+			<artifactId>assertj-swing</artifactId>
+			<version>${assertj.swing.version}</version> 
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.assertj</groupId>
 			<artifactId>assertj-swing-junit</artifactId>
 			<version>${assertj.swing.version}</version>
 			<scope>test</scope>
@@ -114,6 +122,18 @@
 			<groupId>de.bwaldvogel</groupId>
 			<artifactId>mongo-java-server</artifactId>
 			<version>${mongo.java.server.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -143,7 +163,22 @@
 						<configuration>
 							<sources>
 								<source>src/it/java</source>
+								<source>src/bdd/java</source>
 							</sources>
+						</configuration>
+					</execution>
+					<execution>
+						<id>add-test-resource</id>
+						<phase>generate-test-resources</phase>
+						<goals>
+							<goal>add-test-resource</goal>
+						</goals>
+						<configuration>
+							<resources>
+								<resource>
+									<directory>src/bdd/resources</directory>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>
@@ -165,9 +200,24 @@
 							<goal>verify</goal>
 						</goals>
 					</execution>
+					<execution>
+						<id>bdd-tests</id>
+						<goals>
+							<goal>integration-test</goal>
+							<goal>verify</goal>
+						</goals>
+						<configuration>
+							<excludes>
+								<exclude>**/*IT.java</exclude>
+							</excludes>
+							<includes>
+								<include>**/*BDD.java</include>
+							</includes>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
-		<plugin>
+			<plugin>
 				<groupId>io.fabric8</groupId>
 				<artifactId>docker-maven-plugin</artifactId>
 				<version>0.42.1</version>
@@ -178,7 +228,7 @@
 							<run>
 								<ports>
 									<port>mongo.mapped.port:27017</port>
-								</ports>
+								</ports>								
 							</run>
 						</image>
 					</images>
@@ -207,7 +257,12 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
 					<version>3.0.0-M7</version>
-
+					<configuration>
+						<excludes>
+							<exclude>**/*IT.java</exclude>
+							<exclude>**/*BDD.java</exclude>
+						</excludes>
+					</configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.eluder.coveralls</groupId>

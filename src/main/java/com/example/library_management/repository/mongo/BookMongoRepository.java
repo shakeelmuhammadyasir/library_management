@@ -30,7 +30,7 @@ public class BookMongoRepository implements BookRepository {
 	@Override
 	public List<Book> findAll() {
 		return StreamSupport.stream(bookCollection.find().spliterator(), false).map(this::fromDocumentToBook)
-				.collect(Collectors.toList()); // Java 8 compatible
+				.collect(Collectors.toList());
 	}
 
 	@Override

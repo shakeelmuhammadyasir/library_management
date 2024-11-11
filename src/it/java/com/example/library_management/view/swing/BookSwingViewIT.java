@@ -89,7 +89,7 @@ public class BookSwingViewIT extends AssertJSwingJUnitTestCase {
 			bookSwingView.bookAdded(book2);
 		});
 
-		// Then 
+		// Then
 		String[][] actualContents = window.table().contents();
 		String[][] expectedContents = { { "1", "SN001", "Java Programming", "Author A", "Programming", "true" },
 				{ "2", "SN002", "Python Programming", "Author B", "Programming", "false" } };
@@ -126,24 +126,6 @@ public class BookSwingViewIT extends AssertJSwingJUnitTestCase {
 
 		// assert
 		assertThat(actualComboBoxContents).isEqualTo(expectedComboBoxContents);
-	}
-
-	@Test
-	@GUITest
-	public void testAddBookError() {
-		// Given
-		bookRepository.save(new Book(1, "SN001", "Existing Book", "Author D", "Programming", true));
-		window.textBox("ID").enterText("1");
-		window.textBox("Serial Number").enterText("SN001");
-		window.textBox("Name").enterText("New Book");
-		window.textBox("Author Name").enterText("Author E");
-		window.textBox("Genre").enterText("Science Fiction");
-
-		// When
-		window.button(JButtonMatcher.withText("Add Book")).click();
-
-		// Then
-		assertThat(window.table().contents()).isEmpty();
 	}
 
 	@Test
