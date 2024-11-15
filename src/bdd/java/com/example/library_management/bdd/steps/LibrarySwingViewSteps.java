@@ -99,12 +99,16 @@ public class LibrarySwingViewSteps {
 	public void the_book_is_removed_from_both_lists() {
 		String[][] tableContents = window.table().contents();
 		List<String[]> tableContentList = Arrays.asList(tableContents);
+		assertThat(tableContentList).isNotEmpty();
+
 		assertThat(tableContentList).doesNotContain(
 				new String[] { DatabaseSteps.BOOK_1_ID, DatabaseSteps.BOOK_1_SERIAL_NUMBER, DatabaseSteps.BOOK_1_NAME,
 						DatabaseSteps.BOOK_1_AUTHOR_NAME, DatabaseSteps.BOOK_1_GENRE, "true" });
 
 		String[] comboBoxContents = window.comboBox("Serial Number ComboBox").contents();
 		List<String> comboBoxContentList = Arrays.asList(comboBoxContents);
+		assertThat(comboBoxContentList).isNotEmpty();
+
 		assertThat(comboBoxContentList).doesNotContain(DatabaseSteps.BOOK_1_SERIAL_NUMBER);
 	}
 
