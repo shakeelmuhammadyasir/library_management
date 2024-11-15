@@ -7,4 +7,4 @@
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=shakeelmuhammadyasir_library_management&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=shakeelmuhammadyasir_library_management)
 [![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=shakeelmuhammadyasir_library_management&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=shakeelmuhammadyasir_library_management)
 
-[![Maven Package](https://github.com/shakeelmuhammadyasir/library_management/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/shakeelmuhammadyasir/library_management/actions/workflows/maven-publish.yml)
+[![Maven CI](https://github.com/shakeelmuhammadyasir/library_management/actions/workflows/maven-ci.yml/badge.svg)](https://github.com/shakeelmuhammadyasir/library_management/actions/workflows/maven-ci.yml)
