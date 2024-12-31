@@ -57,4 +57,11 @@ public class BookMongoRepository implements BookRepository {
 		return new Book(d.getInteger(ID_FIELD), "" + d.get(SERIAL_NUMBER_FIELD), "" + d.get(NAME_FIELD),
 				"" + d.get(AUTHOR_NAME_FIELD), "" + d.get(GENRE_FIELD), d.getBoolean(IS_AVAILABLE_FIELD, true));
 	}
+
+	@Override
+	public Book findById(Integer id) {
+		return StreamSupport.stream(bookCollection.find(Filters.eq(ID_FIELD, id)).spliterator(), false)
+				.map(this::fromDocumentToBook).findFirst().orElse(null);
+	}
+
 }

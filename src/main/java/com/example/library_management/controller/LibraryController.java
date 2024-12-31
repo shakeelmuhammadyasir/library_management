@@ -28,6 +28,11 @@ public class LibraryController implements Serializable {
 			bookView.showError("Already existing book with serial number " + book.getSerialNumber(), existingBook);
 			return;
 		}
+		Book existingBookById = bookRepository.findById(book.getId());
+		if (existingBookById != null) {
+			bookView.showError("Id Already existing " + book.getId(), existingBookById);
+			return;
+		}
 
 		bookRepository.save(book);
 		bookView.bookAdded(book);

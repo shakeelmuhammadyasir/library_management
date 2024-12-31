@@ -61,6 +61,20 @@ public class LibraryControllerTest {
 	}
 
 	@Test
+	public void testNewBook_IdAlreadyExists() {
+		// Given
+		Book book = new Book(1, "SN001", "Java Programming", "Author A", "Programming", true);
+		when(mockBookRepository.findById(1)).thenReturn(book);
+
+		// When
+		controller.newBook(book);
+
+		// Then
+		verify(mockBookView).showError("Id Already existing 1", book);
+		verify(mockBookRepository, never()).save(book);
+	}
+
+	@Test
 	public void testNewBook_Success() {
 		// Given
 		Book book = new Book(1, "SN001", "Java Programming", "Author A", "Programming", true);
